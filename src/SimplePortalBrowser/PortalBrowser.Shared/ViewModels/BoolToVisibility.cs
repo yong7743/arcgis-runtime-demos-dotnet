@@ -3,6 +3,8 @@
 #if NETFX_CORE
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml;
+#elif XAMARIN
+using Xamarin.Forms;
 #else
 using System.Windows;
 using System.Windows.Data;
@@ -10,28 +12,23 @@ using System.Windows.Data;
 
 namespace PortalBrowser.ViewModels
 {
-	public class BoolToVisibility : IValueConverter
-	{
-#if NETFX_CORE
-		public object Convert(object value, Type targetType, object parameter, string language)
-#else
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-#endif
-		{
+	public class BoolToVisibility : Common.BaseValueConverter
+    {
+        protected override object OnConvert(object value, Type targetType, object paramter, string language)
+        {
 			if (value is bool)
 			{
 				bool val = (bool)value;
-				return val ? Visibility.Visible : Visibility.Collapsed;
+#if XAMARIN
+                return val;
+#else
+                return val ? Visibility.Visible : Visibility.Collapsed;
+#endif
 			}
 			return value;
 		}
-
-#if NETFX_CORE
-		public object ConvertBack(object value, Type targetType, object parameter, string language)
-#else
-		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-#endif
-		{
+        protected override object OnConvertBack(object value, Type targetType, object paramter, string language)
+        {
 			throw new NotImplementedException();
 		}
 	}

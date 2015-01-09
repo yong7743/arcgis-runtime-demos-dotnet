@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 #if NETFX_CORE
 using Windows.UI.Xaml.Data;
+#elif XAMARIN
 #else
 using System.Windows.Data;
 #endif

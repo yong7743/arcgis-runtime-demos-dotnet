@@ -19,10 +19,14 @@ namespace PortalBrowser.Common
 	{
 		protected override object Convert(object value, Type targetType, object paramter, string language)
 		{
-			return (value is bool && (bool)value) ? Visibility.Visible : Visibility.Collapsed;
-		}
+#if XAMARIN
+            return (value is bool && (bool)value) ? true : false;
+#else
+            return (value is bool && (bool)value) ? Visibility.Visible : Visibility.Collapsed;
+#endif
+        }
 
-		protected override object ConvertBack(object value, Type targetType, object paramter, string language)
+        protected override object ConvertBack(object value, Type targetType, object paramter, string language)
 		{
 			return value is Visibility && (Visibility)value == Visibility.Visible;
 		}

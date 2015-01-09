@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PortalBrowser.ViewModels;assembly=PortalBrowser.Droid"
+             x:Class="PortalBrowser.MainPage">
+        <TabbedPage.BindingContext>
+		    <vm:PortalVM />
+        </TabbedPage.BindingContext>
+    <ContentPage Title="Basemaps">
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+	        <Label Text="ArcGIS Runtime SDK Demo - Xamarin" VerticalOptions="Start" HorizontalOptions="Center" Grid.Row="0" />
+        
+            <ListView Grid.Row="1" ItemsSource="{Binding Basemaps}"
+                      ItemTapped="PortalItem_Tapped"
+                      >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ImageCell
+                            ImageSource="{Binding ThumbnailUri}"
+                            Text="{Binding Title}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        
+            <Label Text="{Binding StatusMessage}" VerticalOptions="End" HorizontalOptions="Center" Font="Large" Grid.Row="2" />
+        
+        </Grid>
+    </ContentPage>
+    <ContentPage Title="Featured">
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+	        <Label Text="ArcGIS Runtime SDK Demo - Xamarin" VerticalOptions="Start" HorizontalOptions="Center" Grid.Row="0" />
+        
+            <ListView Grid.Row="1" ItemsSource="{Binding Featured}"
+                      ItemTapped="PortalItem_Tapped"
+                      >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ImageCell
+                            ImageSource="{Binding ThumbnailUri}"
+                            Text="{Binding Title}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        
+            <Label Text="{Binding StatusMessage}" VerticalOptions="End" HorizontalOptions="Center" Font="Large" Grid.Row="2" />
+        
+        </Grid>
+    </ContentPage>
+</TabbedPage>

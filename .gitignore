@@ -2,3 +2,6 @@
 src/*/*/bin/
 src/*/*/obj/
 src/*/packages/*/
+src/SimplePortalBrowser/PortalBrowser/PortalBrowser.Droid/obj/
+src/SimplePortalBrowser/SimplePortal.sln.ide/
+src/SimplePortalBrowser/PortalBrowser/PortalBrowser.iOS/obj/
