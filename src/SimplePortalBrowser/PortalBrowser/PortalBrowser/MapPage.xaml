@@ -3,44 +3,36 @@
     x:Class="PortalBrowser.MapPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:PortalBrowser.ViewModels;assembly=PortalBrowser.Droid"
+    xmlns:vm="clr-namespace:PortalBrowser.ViewModels;assembly=PortalBrowser"
     xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Controls;assembly=Esri.ArcGISRuntime" 
     xmlns:location="clr-namespace:Esri.ArcGISRuntime.Location;assembly=Esri.ArcGISRuntime"
-	>
+	Title="{Binding PortalItem.Title}">
 	<ContentPage.BindingContext>
         <vm:MapVM />
     </ContentPage.BindingContext>
     
-    <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid >
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        
-         <!--TitlePanel contains the name of the application and page title-->
-        <StackLayout Grid.Row="0" Padding="12,0,0,5">
-            <Label Text="{Binding PortalItem.Title}" />
-        </StackLayout>
-        
-        <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1">
+    <Grid Padding="0,-100,0,-100">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" /> 
+		</Grid.RowDefinitions>
+		
+		<StackLayout Padding="0">
+			<Label Text="{Binding PortalItem.Title}" 
+				   TextColor="White"
+				   FontSize="1"/>
+		</StackLayout>
+		
+        <esri:MapView Grid.Row="1"
+				  Map="{Binding WebMapVM.Map}" 
+				  MinScale="{Binding WebMapVM.RecommendedMinScale}"
+				  MaxScale="{Binding WebMapVM.RecommendedMaxScale}">
+        </esri:MapView>
 
-            <esri:MapView 
-                      Map="{Binding WebMapVM.Map}"
-				      MinScale="{Binding WebMapVM.RecommendedMinScale}"
-				      MaxScale="{Binding WebMapVM.RecommendedMaxScale}"
-				      >
-                <!--<esri:MapView.LocationDisplay>
-					<location:LocationDisplay IsEnabled="True" />
-				</esri:MapView.LocationDisplay>-->
-            </esri:MapView>        
-
-            <ActivityIndicator Color="Red" VerticalOptions="Center" HorizontalOptions="Center"
-                               IsRunning="{Binding IsLoadingWebMap}"
-						     />
+        <ActivityIndicator Color="Red" VerticalOptions="Center" HorizontalOptions="Center"
+                            IsRunning="{Binding IsLoadingWebMap}" 
+						   Grid.Row="1"/>
         
-        </Grid>
     </Grid>
     
 </ContentPage>

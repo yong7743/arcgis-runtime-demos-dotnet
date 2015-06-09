@@ -5,3 +5,5 @@ src/*/packages/*/
 src/SimplePortalBrowser/PortalBrowser/PortalBrowser.Droid/obj/
 src/SimplePortalBrowser/SimplePortal.sln.ide/
 src/SimplePortalBrowser/PortalBrowser/PortalBrowser.iOS/obj/
+src/SimplePortalBrowser/PortalBrowser/PortalBrowser.Droid/bin/
+src/SimplePortalBrowser/PortalBrowser/PortalBrowser.iOS/bin/
