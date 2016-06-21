@@ -11,6 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 #if NETFX_CORE
 using Windows.UI;
+#elif __IOS__ || __ANDROID__
+using System.Drawing;
+using Colors = System.Drawing.Color;
 #else
 using System.Windows.Media;
 #endif

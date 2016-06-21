@@ -3,3 +3,7 @@ src/*/*/bin/
 src/*/*/obj/
 src/*/packages/*/
 src/KmlViewer/KmlViewer.Windows/AppPackages/
+src/TurnByTurn/.vs/
+src/TurnByTurn/RoutingSample.UWP/RoutingSample.Xamarin.UWP.nuget.targets
+src/TurnByTurn/RoutingSample.UWP/project.lock.json
+*.user

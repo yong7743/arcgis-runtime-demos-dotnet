@@ -1,14 +1,20 @@
 ﻿using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-#if NETFX_CORE
+#if __IOS__ || __ANDROID__
+using Xamarin.Forms;
+using Esri.ArcGISRuntime.Xamarin.Forms;
+using DependencyObject = Xamarin.Forms.BindableObject;
+using DependencyProperty = Xamarin.Forms.BindableProperty;
+#elif NETFX_CORE
+using Esri.ArcGISRuntime.UI;
 using Windows.UI.Xaml;
 #else
+using Esri.ArcGISRuntime.UI;
 using System.Windows;
 #endif
 
@@ -37,20 +43,31 @@ namespace RoutingSample
 			obj.SetValue(RequestViewProperty, extent);
 		}
 
-		/// <summary>
-		/// Identifies the ZoomTo Attached Property.
-		/// </summary>
-		public static readonly DependencyProperty RequestViewProperty =
-			DependencyProperty.RegisterAttached("RequestView", typeof(Viewpoint), typeof(CommandBinder), new PropertyMetadata(null, RequestViewPropertyChanged));
-
-		private static void RequestViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        /// <summary>
+        /// Identifies the ZoomTo Attached Property.
+        /// </summary>
+        public static readonly DependencyProperty RequestViewProperty =
+#if __IOS__ || __ANDROID__
+            DependencyProperty.CreateAttached("RequestView", typeof(Viewpoint), typeof(CommandBinder), null, BindingMode.OneWay, null,
+                RequestViewPropertyChanged);
+#else
+            DependencyProperty.RegisterAttached("RequestView", typeof(Viewpoint), typeof(CommandBinder), new PropertyMetadata(null, RequestViewPropertyChanged));
+#endif
+        private static void RequestViewPropertyChanged(DependencyObject d,
+#if __IOS__ || __ANDROID__
+            object oldValue, object newValue)
+        {
+#else
+            DependencyPropertyChangedEventArgs e)
 		{
-			if (d is MapView)
+            var newValue = e.NewValue;
+#endif
+            if (d is MapView)
 			{
 				MapView mapView = d as MapView;
-				if (e.NewValue is Viewpoint)
+				if (newValue is Viewpoint)
 				{
-					mapView.SetViewpoint((Viewpoint)e.NewValue);
+					mapView.SetViewpoint((Viewpoint)newValue);
 				}
 			}
 		}

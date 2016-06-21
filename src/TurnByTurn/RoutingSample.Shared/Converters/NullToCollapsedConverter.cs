@@ -12,10 +12,14 @@ namespace RoutingSample.Converters
 	{
 		protected override object Convert(object value, Type targetType, object parameter, string language)
 		{
-			return value == null ? Visibility.Collapsed : Visibility.Visible;
-		}
+#if __IOS__ || __ANDROID__
+            return value == null;
+#else
+            return value == null ? Visibility.Collapsed : Visibility.Visible;
+#endif
+        }
 
-		protected override object ConvertBack(object value, Type targetType, object parameter, string language)
+        protected override object ConvertBack(object value, Type targetType, object parameter, string language)
 		{
 			throw new NotImplementedException();
 		}

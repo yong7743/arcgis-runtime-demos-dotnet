@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 #if NETFX_CORE
 using Windows.UI.Xaml;
-#else
+#elif !__IOS__ && !__ANDROID__
 using System.Windows.Threading;
 #endif
 

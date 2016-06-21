@@ -1,13 +1,18 @@
-﻿
-using Esri.ArcGISRuntime.Location;
-using Esri.ArcGISRuntime.UI;
+﻿using Esri.ArcGISRuntime.Location;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 #if NETFX_CORE
+using Esri.ArcGISRuntime.UI;
 using Windows.UI.Xaml;
+#elif __IOS__ || __ANDROID__
+using Xamarin.Forms;
+using Esri.ArcGISRuntime.Xamarin.Forms;
+using DependencyObject = Xamarin.Forms.BindableObject;
+using DependencyProperty = Xamarin.Forms.BindableProperty;
 #else
+using Esri.ArcGISRuntime.UI;
 using System.Windows.Threading;
 #endif
 
@@ -109,22 +114,33 @@ namespace RoutingSample
 			obj.SetValue(RestoreAutoPanSettingsProperty, value);
 		}
 
-		public static readonly DependencyProperty RestoreAutoPanSettingsProperty =
-			DependencyProperty.RegisterAttached("RestoreAutoPanSettings", typeof(RestoreAutoPanMode), typeof(RestoreAutoPanMode), 
-			new PropertyMetadata(null, OnRestoreAutoPanSettingsChanged));
+        public static readonly DependencyProperty RestoreAutoPanSettingsProperty =
+#if __IOS__ || __ANDROID__
+            DependencyProperty.CreateAttached("RestoreAutoPanSettings", typeof(RestoreAutoPanMode), typeof(RestoreAutoPanMode),
+                null, BindingMode.OneWay, null, OnRestoreAutoPanSettingsChanged);
+#else
+            DependencyProperty.RegisterAttached("RestoreAutoPanSettings", typeof(RestoreAutoPanMode), typeof(RestoreAutoPanMode),
+            new PropertyMetadata(null, OnRestoreAutoPanSettingsChanged));
+#endif
 
-		private static void OnRestoreAutoPanSettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnRestoreAutoPanSettingsChanged(DependencyObject d,
+#if __IOS__ || __ANDROID__
+            object oldValue, object newValue)
+        {
+#else
+            DependencyPropertyChangedEventArgs e)
 		{
-			if (!(d is MapView))
+            var oldValue = e.OldValue;
+            var newValue = e.NewValue;
+#endif
+            if (!(d is MapView))
 				throw new InvalidOperationException("This property must be attached to a mapview");
 
 			MapView mv = (MapView)d;
-			var oldValue = e.OldValue as RestoreAutoPanMode;
-			if (oldValue != null)
-				oldValue.DetachFromMapView(mv);
-			var newValue = e.NewValue as RestoreAutoPanMode;
-			if (newValue != null)
-				newValue.AttachToMapView(mv);
+			if (oldValue is RestoreAutoPanMode)
+				((RestoreAutoPanMode)oldValue).DetachFromMapView(mv);
+			if (newValue is RestoreAutoPanMode)
+                ((RestoreAutoPanMode)newValue).AttachToMapView(mv);
 		}		
 	}
 }

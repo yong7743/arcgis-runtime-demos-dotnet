@@ -1,6 +1,8 @@
 ﻿using System;
 #if NETFX_CORE
 using Windows.UI.Xaml.Data;
+#elif __IOS__ || __ANDROID__
+using Xamarin.Forms;
 #else
 using System.Windows.Data;
 #endif
