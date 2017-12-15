@@ -19,16 +19,13 @@ namespace XamarinPortalBrowser
 
         private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            ListView listView = sender as ListView;
             MapVM mapVM = new MapVM();
            
             try
             {
-                //MapVM mapVM = (MapVM)this.Resources["mapVM"];
-                //MapPage mapPage = new MapPage((MapVM)this.Resources["mapVM"]);
                 this.Navigation.PushAsync(new MapPage(mapVM));
-                if (listView.SelectedItem != null)
-                    mapVM.PortalItem = listView.SelectedItem as PortalItem;
+                if (e.Item != null)
+                    mapVM.PortalItem = e.Item as PortalItem;
             }
             catch (Exception ex)
             { }
