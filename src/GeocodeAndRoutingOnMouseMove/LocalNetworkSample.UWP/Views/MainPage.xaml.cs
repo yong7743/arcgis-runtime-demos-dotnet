@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Esri.ArcGISRuntime.UI.Controls;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace LocalNetworkSample
 
         private void mapview_PointerMoved(object sender, PointerRoutedEventArgs e)
 		{
-			var mapview = (Esri.ArcGISRuntime.UI.MapView)sender;
+			var mapview = (MapView)sender;
 			var vm = (MainPageVM)mapview.DataContext;
 			vm.UpdateMouseLocation(mapview.ScreenToLocation(e.GetCurrentPoint(mapview).Position));
 		}

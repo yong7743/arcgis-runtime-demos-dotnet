@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:common="using:LocalNetworkSample.Common"	
 	xmlns:esri="using:Esri.ArcGISRuntime.UI"
+	xmlns:controls="using:Esri.ArcGISRuntime.UI.Controls"
 	xmlns:mapping="using:Esri.ArcGISRuntime.Mapping"
 	xmlns:symb="using:Esri.ArcGISRuntime.Symbology"
 	xmlns:geom="using:Esri.ArcGISRuntime.Geometry"
@@ -74,7 +75,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <esri:MapView x:Name="mapview" Grid.ColumnSpan="2"
+        <controls:MapView x:Name="mapview" Grid.ColumnSpan="2"
 					  PointerMoved="mapview_PointerMoved"
 					  Map="{Binding Map}" />
 

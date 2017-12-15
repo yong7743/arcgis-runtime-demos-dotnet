@@ -1,4 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Location;
+using Esri.ArcGISRuntime.UI;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -73,9 +74,9 @@ namespace LocalNetworkSample.Controls
         {
             var ctrl = (LocationDisplayToggle)d;
             if ((bool)e.NewValue)
-                ctrl.LocationDisplay?.Start();
+                ctrl.LocationDisplay.IsEnabled = true;
             else
-                ctrl.LocationDisplay?.Stop();
+                ctrl.LocationDisplay.IsEnabled = true;
             ctrl.UpdateIcon();
         }
 
