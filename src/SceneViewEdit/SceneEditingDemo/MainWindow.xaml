@@ -14,16 +14,15 @@
 			<esri:SimpleRenderer x:Key="PolygonRenderer" Symbol="{StaticResource SFS}" />
 		</Grid.Resources>
         <esri:SceneView x:Name="MySceneView"
-						SceneViewTapped="MySceneView_SceneViewTapped">
+						GeoViewTapped="MySceneView_SceneViewTapped">
             <esri:Scene>
-				<esri:ArcGISTiledMapServiceLayer 
-                    ID="StreetMapLayer"
-					ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
+				<esri:ArcGISTiledLayer 
+					Source="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
 			</esri:Scene>
 			<esri:SceneView.GraphicsOverlays>
-				<esri:GraphicsOverlay ID="PointGraphicsOverlay" Renderer="{StaticResource MarkerRenderer}" />
-				<esri:GraphicsOverlay ID="PolylineGraphicsOverlay" Renderer="{StaticResource PolylineRenderer}" />
-				<esri:GraphicsOverlay ID="PolygonGraphicsOverlay" Renderer="{StaticResource PolygonRenderer}" />
+				<esri:GraphicsOverlay Id="PointGraphicsOverlay" Renderer="{StaticResource MarkerRenderer}" />
+				<esri:GraphicsOverlay Id="PolylineGraphicsOverlay" Renderer="{StaticResource PolylineRenderer}" />
+				<esri:GraphicsOverlay Id="PolygonGraphicsOverlay" Renderer="{StaticResource PolygonRenderer}" />
 			</esri:SceneView.GraphicsOverlays>
 		</esri:SceneView>
 

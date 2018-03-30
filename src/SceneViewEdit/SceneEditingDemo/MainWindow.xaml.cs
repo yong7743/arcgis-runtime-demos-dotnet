@@ -1,8 +1,9 @@
-﻿using Esri.ArcGISRuntime.Controls;
-using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Layers;
+﻿using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.UI;
+using Esri.ArcGISRuntime.UI.Controls;
 using SceneEditingDemo.Helpers;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -159,7 +160,7 @@ namespace SceneEditingDemo
 			EditButton.IsEnabled = false; 
 		}
 
-		private async void MySceneView_SceneViewTapped(object sender, MapViewInputEventArgs e)
+		private async void MySceneView_SceneViewTapped(object sender, GeoViewInputEventArgs e)
 		{
 			// If draw or edit is active, return
 			if (SceneEditHelper.IsActive) return; 
@@ -180,10 +181,8 @@ namespace SceneEditingDemo
 
 			// Find first graphic from the overlays
 			foreach (var overlay in MySceneView.GraphicsOverlays)
-			{
-				var foundGraphic = await overlay.HitTestAsync(
-						MySceneView,
-						point);
+            {
+                var foundGraphic = (await MySceneView.IdentifyGraphicsOverlayAsync(overlay, point, 5, false))?.Graphics?.FirstOrDefault();
 
 				if (foundGraphic != null)
 				{
@@ -196,4 +195,12 @@ namespace SceneEditingDemo
 			EditButton.IsEnabled = _selection == null ? false : true;
 		}
 	}
+
+    internal enum DrawShape
+    {
+        None = 0,
+        Point,
+        Polyline,
+        Polygon
+    }
 }
