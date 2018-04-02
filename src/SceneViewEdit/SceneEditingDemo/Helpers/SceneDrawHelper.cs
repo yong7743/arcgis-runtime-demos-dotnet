@@ -147,17 +147,17 @@ namespace SceneEditingDemo.Helpers
 			var tcs = new TaskCompletionSource<Polygon>();
 			PolygonBuilder polygonBuilder = new PolygonBuilder(new Esri.ArcGISRuntime.Geometry.PointCollection(sceneView.SpatialReference));
 			var sketchlayer = CreateSketchLayer(sceneView);
-            
-            //var rendrr = new SimpleRenderer(DefaultFillSymbol);
-            //rendrr.SceneProperties.ExtrusionMode = ExtrusionMode.AbsoluteHeight;
-            //rendrr.SceneProperties.ExtrusionExpression = "[height]";
-            //sketchlayer.Renderer = rendrr;
+            var sketchlayer2 = CreateSketchLayer(sceneView);
+            var rendrr = new SimpleRenderer(DefaultFillSymbol);
+            rendrr.SceneProperties.ExtrusionMode = ExtrusionMode.AbsoluteHeight;
+            rendrr.SceneProperties.ExtrusionExpression = "[height]";
+            sketchlayer.Renderer = rendrr;
 
             Graphic polygonGraphic = new Graphic() { Symbol = DefaultFillSymbol };
             polygonGraphic.Attributes.Add("height", 50000);
             Graphic lineMoveGraphic = new Graphic() { Symbol = DefaultLineMoveSymbol };
             sketchlayer.Graphics.Add(polygonGraphic);
-            sketchlayer.Graphics.Add(lineMoveGraphic);
+            sketchlayer2.Graphics.Add(lineMoveGraphic);
 
             Action cleanupEvents = SetUpHandlers(sceneView,
 				(p) => //On mouse move move completion line around
@@ -177,7 +177,7 @@ namespace SceneEditingDemo.Helpers
 					if (p != null)
 					{
 						polygonBuilder.AddPoint(p);
-						if (polygonBuilder.Parts.Count > 0 && polygonBuilder.Parts[0].PointCount > 1)
+						if (polygonBuilder.Parts.Count > 0 && polygonBuilder.Parts[0].PointCount > 2)
 						{
 							polygonGraphic.Geometry = polygonBuilder.ToGeometry();
 							lineMoveGraphic.Geometry = null;
@@ -192,7 +192,8 @@ namespace SceneEditingDemo.Helpers
 			{
 				cleanupEvents();
 				sceneView.GraphicsOverlays.Remove(sketchlayer);
-			};
+                sceneView.GraphicsOverlays.Remove(sketchlayer2);
+            };
 			cancellationToken.Register(() => tcs.SetCanceled());
 
 			Polygon result = null;
