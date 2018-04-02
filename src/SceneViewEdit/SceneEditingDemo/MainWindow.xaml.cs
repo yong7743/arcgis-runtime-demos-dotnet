@@ -1,4 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using SceneEditingDemo.Helpers;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Media = System.Windows.Media;
 
 namespace SceneEditingDemo
 {
@@ -32,6 +34,7 @@ namespace SceneEditingDemo
 			_pointsOverlay = MySceneView.GraphicsOverlays["PointGraphicsOverlay"];
 			_polylinesOverlay = MySceneView.GraphicsOverlays["PolylineGraphicsOverlay"];
 			_polygonsOverlay = MySceneView.GraphicsOverlays["PolygonGraphicsOverlay"];
+            _polygonsOverlay.RenderingMode = GraphicsRenderingMode.Dynamic;
 
 			EditButton.IsEnabled = false;
             CancelButton.IsEnabled = false;
@@ -64,7 +67,18 @@ namespace SceneEditingDemo
 			        case DrawShape.Polygon:
 				        geometry = await SceneEditHelper.CreatePolygonAsync(MySceneView);
 				        graphic = new Graphic(geometry);
-				        _polygonsOverlay.Graphics.Add(graphic);
+
+                        // create a simple renderer that uses a (polygon) fill symbol
+                        var lineSym = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Media.Colors.Black, 1);
+                        var fillSym = new SimpleFillSymbol(SimpleFillSymbolStyle.Solid, Media.Color.FromArgb(128, 0, 255, 0), lineSym);
+                        var rendrr = new SimpleRenderer(fillSym);
+                        //graphic.Attributes.Add("height", 50000);
+                        //rendrr.SceneProperties.ExtrusionMode = ExtrusionMode.AbsoluteHeight;
+                        //rendrr.SceneProperties.ExtrusionExpression = "[height]";
+
+                        _polygonsOverlay.Graphics.Add(graphic);
+
+                        _polygonsOverlay.Renderer = rendrr;
 				        break;
 			        case DrawShape.Polyline:
 				        geometry = await SceneEditHelper.CreatePolylineAsync(MySceneView);

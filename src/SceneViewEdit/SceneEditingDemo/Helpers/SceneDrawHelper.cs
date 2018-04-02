@@ -38,11 +38,11 @@ namespace SceneEditingDemo.Helpers
 			Color = Color.FromArgb(100, 0, 0, 255)
 		};
 
-		//Line Symbol used to show line between last added vertex and current mouse location
-		private static LineSymbol DefaultLineMoveSymbol = new SimpleLineSymbol()
-		{
-			Width = 5,
-			Color = Color.FromArgb(100, 255, 255, 255),
+        //Line Symbol used to show line between last added vertex and current mouse location
+        private static LineSymbol DefaultLineMoveSymbol = new SimpleLineSymbol()
+        {
+            Width = 2,
+            Color = Color.FromArgb(200, 255, 255, 255),
 			Style = SimpleLineSymbolStyle.Dot
 		};
 		#endregion Default draw symbols
@@ -94,7 +94,7 @@ namespace SceneEditingDemo.Helpers
 		public static async Task<Polyline> DrawPolylineAsync(SceneView sceneView, System.Threading.CancellationToken cancellationToken)
 		{
 			var tcs = new TaskCompletionSource<Polyline>();
-			PolylineBuilder polylineBuilder = new PolylineBuilder(sceneView.SpatialReference);
+			PolylineBuilder polylineBuilder = new PolylineBuilder(new Esri.ArcGISRuntime.Geometry.PointCollection(sceneView.SpatialReference));
 			var sketchlayer = CreateSketchLayer(sceneView);
 			Graphic lineGraphic = new Graphic() { Symbol = DefaultLineSymbol };
 			Graphic lineMoveGraphic = new Graphic() { Symbol = DefaultLineMoveSymbol };
@@ -114,7 +114,9 @@ namespace SceneEditingDemo.Helpers
 					{
 						polylineBuilder.AddPoint(p);
 						if (polylineBuilder.Parts.Count > 0 && polylineBuilder.Parts[0].Count >= 1)
-							lineGraphic.Geometry = polylineBuilder.ToGeometry();
+                        {
+                            lineGraphic.Geometry = polylineBuilder.ToGeometry();
+                        }
 					}
 				},
 				(p) => //View tapped - completes task and returns point
@@ -143,16 +145,24 @@ namespace SceneEditingDemo.Helpers
 		public static async Task<Polygon> DrawPolygonAsync(SceneView sceneView, System.Threading.CancellationToken cancellationToken)
 		{
 			var tcs = new TaskCompletionSource<Polygon>();
-			PolygonBuilder polygonBuilder = new PolygonBuilder(sceneView.SpatialReference);
+			PolygonBuilder polygonBuilder = new PolygonBuilder(new Esri.ArcGISRuntime.Geometry.PointCollection(sceneView.SpatialReference));
 			var sketchlayer = CreateSketchLayer(sceneView);
-			Graphic polygonGraphic = new Graphic() { Symbol = DefaultFillSymbol };
-			Graphic lineMoveGraphic = new Graphic() { Symbol = DefaultLineMoveSymbol };
+            
+            //var rendrr = new SimpleRenderer(DefaultFillSymbol);
+            //rendrr.SceneProperties.ExtrusionMode = ExtrusionMode.AbsoluteHeight;
+            //rendrr.SceneProperties.ExtrusionExpression = "[height]";
+            //sketchlayer.Renderer = rendrr;
+
+            Graphic polygonGraphic = new Graphic() { Symbol = DefaultFillSymbol };
+            polygonGraphic.Attributes.Add("height", 50000);
+            Graphic lineMoveGraphic = new Graphic() { Symbol = DefaultLineMoveSymbol };
             sketchlayer.Graphics.Add(polygonGraphic);
             sketchlayer.Graphics.Add(lineMoveGraphic);
+
             Action cleanupEvents = SetUpHandlers(sceneView,
 				(p) => //On mouse move move completion line around
 				{
-					if (p != null && polygonBuilder.Parts.Count > 0)
+					if (p != null && polygonBuilder.Parts.Count > 0 && polygonBuilder.Parts[0].PointCount > 0)
 					{
 						lineMoveGraphic.Geometry = new Polyline(new MapPoint[] 
 							{
@@ -167,7 +177,7 @@ namespace SceneEditingDemo.Helpers
 					if (p != null)
 					{
 						polygonBuilder.AddPoint(p);
-						if (polygonBuilder.Parts.Count > 0 && polygonBuilder.Parts[0].Count > 0)
+						if (polygonBuilder.Parts.Count > 0 && polygonBuilder.Parts[0].PointCount > 1)
 						{
 							polygonGraphic.Geometry = polygonBuilder.ToGeometry();
 							lineMoveGraphic.Geometry = null;
@@ -255,7 +265,7 @@ namespace SceneEditingDemo.Helpers
 		private static GraphicsOverlay CreateSketchLayer(GeoView scene)
 		{
 			GraphicsOverlay go = new GraphicsOverlay();
-			scene.GraphicsOverlays.Add(go);
+            scene.GraphicsOverlays.Add(go);
 			return go;
 		}
 		#endregion Private utility methods
