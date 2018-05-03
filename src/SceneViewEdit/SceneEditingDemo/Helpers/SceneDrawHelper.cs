@@ -154,7 +154,7 @@ namespace SceneEditingDemo.Helpers
             sketchlayer.Renderer = rendrr;
 
             Graphic polygonGraphic = new Graphic() { Symbol = DefaultFillSymbol };
-            polygonGraphic.Attributes.Add("height", 50000);
+            polygonGraphic.Attributes.Add("height", 500000);
             Graphic lineMoveGraphic = new Graphic() { Symbol = DefaultLineMoveSymbol };
             sketchlayer.Graphics.Add(polygonGraphic);
             sketchlayer2.Graphics.Add(lineMoveGraphic);

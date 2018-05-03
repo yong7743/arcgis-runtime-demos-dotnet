@@ -72,7 +72,7 @@ namespace SceneEditingDemo
                         var lineSym = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Media.Colors.Black, 1);
                         var fillSym = new SimpleFillSymbol(SimpleFillSymbolStyle.Solid, Media.Color.FromArgb(128, 0, 255, 0), lineSym);
                         var rendrr = new SimpleRenderer(fillSym);
-                        graphic.Attributes.Add("height", 50000);
+                        graphic.Attributes.Add("height", 500000);
                         rendrr.SceneProperties.ExtrusionMode = ExtrusionMode.AbsoluteHeight;
                         rendrr.SceneProperties.ExtrusionExpression = "[height]";
 
